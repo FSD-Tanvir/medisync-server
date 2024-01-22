@@ -26,6 +26,7 @@ const userRoutes = require('./api/routes/useRoutes')
 app.use('/users', userRoutes)
 
 
+
 app.get('/', (req, res) => {
     res.send('medisync project is running')
 })
