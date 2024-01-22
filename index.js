@@ -21,6 +21,10 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cl
 
 
 // import route here
+
+const productRoutes = require('./api/routes/productsRoutes')
+app.use('/allProducts',productRoutes)
+
 const userRoutes = require('./api/routes/useRoutes')
 
 app.use('/users', userRoutes)
