@@ -10,14 +10,12 @@ app.use(cors())
 app.use(express.json())
 
 
-
-
 mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.syrsapj.mongodb.net/?retryWrites=true&w=majority`)
     .then(
-        console.log("mongoose connected sucessfully")
+        console.log("mongoose connected successfully")
     )
     .catch((error) => {
-        console.log("error connecting tomongodb", error)
+        console.log("error connecting to mongodb", error)
     })
 
 
