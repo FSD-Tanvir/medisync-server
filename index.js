@@ -23,6 +23,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cl
 // import route here
 const userRoutes = require('./api/routes/useRoutes');
 const adviceRoutes = require('./api/routes/adviceRoutes')
+const jobRoutes = require('./api/routes/jobRoutes')
 
 const productRoutes = require('./api/routes/productsRoutes')
 app.use('/allProducts',productRoutes)
@@ -31,6 +32,7 @@ app.use('/allProducts',productRoutes)
 
 app.use('/users', userRoutes)
 app.use('/advices', adviceRoutes)
+app.use("/jobs", jobRoutes)
 
 
 
