@@ -1,4 +1,4 @@
-const NewsAndArticles = require("../models/NewsAndArticles");
+const NewsAndArticles = require("../models/newsAndArticles");
 
 const getAllNesAndArticles = async (req, res) => {
   try {
