@@ -5,5 +5,6 @@ const newsAndArticlesController = require("../controlers/newsAndArticlesControll
 // get all products item
 
 router.get("/", newsAndArticlesController.getAllNesAndArticles);
+router.get("/single/:id", newsAndArticlesController.getNesAndArticleById);
 
 module.exports = router;
