@@ -12,6 +12,18 @@ const getAllUsers = async (req, res) => {
     }
   };
 
+  const postUser = async(req, res)=>{
+    try{
+      const userData = req.body ;
+      const newUser = new User(userData)
+      const savedUser = await newUser.save()
+      res.json(savedUser)
+    }
+    catch(err){
+      console.log(err)
+    }
+  }
+
   module.exports = {
-    getAllUsers
+    getAllUsers, postUser 
 }
