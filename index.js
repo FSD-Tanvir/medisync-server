@@ -32,13 +32,19 @@ const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
 
 app.use("/allProducts", productRoutes);
 app.use("/users", userRoutes);
-app.use("/advices", adviceRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/newAndArticles", newsAndArticles);
+
 app.use("/newAndArticles/addArticle", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/", newsAndArticles);
+
+app.use("/advices", adviceRoutes);
+app.use("/advices/addAdvice", adviceRoutes);
+app.use("/", adviceRoutes);
+app.use("/", adviceRoutes);
+
 // end import route here
 
 app.get("/", (req, res) => {

@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const doctorControler = require('../controllers/doctorController')
+const doctorController = require('../controllers/doctorController')
 
 // get all doctors item
 
-router.get('/',doctorControler.getAllDoctors)
+router.get('/',doctorController.getAllDoctors)
+router.post('/',doctorController.postDoctor)
 
 
 module.exports = router;
