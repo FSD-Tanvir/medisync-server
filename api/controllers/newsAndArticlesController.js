@@ -19,7 +19,44 @@ const getNesAndArticleById = async (req, res) => {
   }
 };
 
+const addAnArticle = async (req, res) => {
+  const newArticle = new NewsAndArticles(req.body);
+  const result = await newArticle.save();
+  res.send(result);
+};
+
+const deleteArticle = async (req, res) => {
+  const id = req.params.id;
+  const result = await NewsAndArticles.deleteOne({ _id: id });
+  res.send(result);
+};
+
+const updateArticle = async (req, res) => {
+  console.log("update id...", req.params.id);
+  console.log("update data...", req.body);
+  const updateInfo = req.body;
+  console.log(updateInfo);
+
+  const result = await NewsAndArticles.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      $set: {
+        title: updateInfo?.title,
+        description: updateInfo?.description,
+        image: updateInfo?.image,
+        date: updateInfo?.date,
+      },
+    },
+    { new: true }
+  );
+
+  res.send(result);
+};
+
 module.exports = {
   getAllNesAndArticles,
   getNesAndArticleById,
+  addAnArticle,
+  deleteArticle,
+  updateArticle,
 };

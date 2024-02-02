@@ -8,6 +8,7 @@ const newsAndArticlesSchema = new Schema({
   title: String,
   description: String,
   image: String,
+  date: String,
 });
 
 const NewsAndArticles = mongoose.model(
