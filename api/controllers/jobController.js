@@ -4,10 +4,21 @@ const Job = require("../models/Job");
 const getAllJobs = async (req, res) => {
   try {
     const jobsData = await Job.find();
-    res.status(200).json({
-      status: true,
-      data: jobsData,
-    });
+
+    if (req.query.departmentOnly) {
+      const departments = await Job.find().select({department:1,vacancy:1});
+      res.status(200).json({
+        status: true,
+        data: jobsData,
+        departments: departments,
+      });
+    }else{
+      res.status(200).json({
+        status: true,
+        data: jobsData,
+      });
+    }
+    
   } catch (err) {
     res.status(500).json({
       status: false,
@@ -55,7 +66,7 @@ const updateSingleJob = async (req, res) => {
   try {
     const updatedJob = req.body;
     await Job.updateOne({ _id: req.params.id }, { $set: { ...updatedJob } });
-    res.status(201).json({
+    res.status(200).json({
       status: true,
       message: "Job data updated successfully",
     });
@@ -71,7 +82,7 @@ const updateSingleJob = async (req, res) => {
 const deleteJob = async (req, res) => {
   try {
     await Job.deleteOne({ _id: req.params.id });
-    res.status(201).json({
+    res.status(200).json({
       status: true,
       message: "Job deleted successfully",
     });
