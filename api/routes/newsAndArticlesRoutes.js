@@ -6,5 +6,14 @@ const newsAndArticlesController = require("../controllers/newsAndArticlesControl
 
 router.get("/", newsAndArticlesController.getAllNesAndArticles);
 router.get("/single/:id", newsAndArticlesController.getNesAndArticleById);
+router.post("/", newsAndArticlesController.addAnArticle);
+router.delete(
+  "/newAndArticles/deleteArticle/:id",
+  newsAndArticlesController.deleteArticle
+);
+router.patch(
+  "/newsAndArticle/update/:id",
+  newsAndArticlesController.updateArticle
+);
 
 module.exports = router;
