@@ -29,8 +29,10 @@ const jobRoutes = require("./api/routes/jobRoutes");
 const productRoutes = require("./api/routes/productsRoutes");
 const doctorRoutes = require("./api/routes/doctorRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
+const productCartRoutes = require("./api/routes/productCartRoute")
 
 app.use("/allProducts", productRoutes);
+app.use("/productCart",productCartRoutes);
 app.use("/users", userRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/doctors", doctorRoutes);
