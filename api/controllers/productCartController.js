@@ -6,6 +6,7 @@ const getProductCartByEmail = async (req, res) => {
         const email = req.query.email
         const query = { email: email }
         const result = await ProductCarts.find(query).exec()
+        res.status(200).json(result)
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -29,7 +30,23 @@ const addtoCart = async (req, res) => {
     }
 }
 
+// delete a productCart Item by user
+
+const deleteProduct = async (req, res) => {
+    const cartId = req.params.id
+    try {
+        const deleteCart = await ProductCarts.findByIdAndDelete(cartId)
+        if (!deleteCart) {
+            return res.status(401).json({ message: "Cart item notfound" })
+        }
+        res.status(200).json({ message: "Cart Item Delted Suceesfully" })
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+    }
+}
+
 module.exports = {
     getProductCartByEmail,
-    addtoCart 
+    addtoCart,
+    deleteProduct
 }

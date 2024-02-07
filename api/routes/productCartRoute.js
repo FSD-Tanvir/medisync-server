@@ -6,5 +6,9 @@ const productCartController = require('../controllers/productCartController')
 router.get('/', productCartController.getProductCartByEmail)
 
 // post product by user 
-router.get('/',productCartController.addtoCart)
+router.post('/', productCartController.addtoCart)
+
+// delete cart by user
+router.delete('/:id', productCartController.deleteProduct)
+
 module.exports = router
