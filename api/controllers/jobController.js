@@ -4,21 +4,10 @@ const Job = require("../models/Job");
 const getAllJobs = async (req, res) => {
   try {
     const jobsData = await Job.find();
-
-    if (req.query.departmentOnly) {
-      const departments = await Job.find().select({department:1,vacancy:1});
-      res.status(200).json({
-        status: true,
-        data: jobsData,
-        departments: departments,
-      });
-    }else{
-      res.status(200).json({
-        status: true,
-        data: jobsData,
-      });
-    }
-    
+    res.status(200).json({
+      status: true,
+      data: jobsData,
+    });
   } catch (err) {
     res.status(500).json({
       status: false,
