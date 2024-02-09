@@ -14,7 +14,7 @@ const getProductCartByEmail = async (req, res) => {
 
 // post  a cart when user click add-to-cart button
 const addtoCart = async (req, res) => {
-    const { productItemId, name, weight, company, image, price, quantity, email } = req.body
+    const { productItemId,quintity, name, weight, company, image, price,totalPrice, email } = req.body
     try {
         // existing product item
         const existingProductItem = await ProductCarts.findOne({ productItemId })
@@ -22,7 +22,7 @@ const addtoCart = async (req, res) => {
             return res.status(400).json({ message: "Product alredy exist alredy on the cart" })
         }
         const productItem = await ProductCarts.create({
-            productItemId, name, weight, company, image, price, quantity, email
+            productItemId,quintity, name, weight, company, image, price,totalPrice, email
         })
         res.status(201).json(productItem)
     } catch (error) {
