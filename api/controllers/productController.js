@@ -18,19 +18,33 @@ const getAllProducts = async (req, res) => {
     }
 }
 
-
+// get singel product
 const singelProductItem = async (req, res) => {
     const productId = req.params.id
     try {
-      const product = await Product.findById(productId);
-      res.status(200).json(product);
+        const product = await Product.findById(productId);
+        res.status(200).json(product);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-  };
+};
 
-  
+
+//  delete product
+const deleteProduct = async (req, res) => {
+    try {
+        await Product.deleteOne({ _id: req.params.id })
+        res.status(200).json({
+            status: true,
+            message: "Job deleted successfully",
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+
 
 module.exports = {
-    getAllProducts,singelProductItem
+    getAllProducts, singelProductItem, deleteProduct
 }
