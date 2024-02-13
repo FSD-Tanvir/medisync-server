@@ -63,18 +63,26 @@ const doctorRoutes = require("./api/routes/doctorRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
 const chatRoute = require("./api/routes/chatRoute");
 const messageRoute = require("./api/routes/messageRoute");
+const productCartRoutes = require("./api/routes/productCartRoute");
 
 app.use("/allProducts", productRoutes);
+app.use("/productCart", productCartRoutes);
 app.use("/users", userRoutes);
-app.use("/advices", adviceRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/newAndArticles", newsAndArticles);
+
 app.use("/newAndArticles/addArticle", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/chats", chatRoute);
 app.use("/messages", messageRoute);
+
+app.use("/advices", adviceRoutes);
+app.use("/advices/addAdvice", adviceRoutes);
+app.use("/", adviceRoutes);
+app.use("/", adviceRoutes);
+
 // end import route here
 
 app.get("/", (req, res) => {
