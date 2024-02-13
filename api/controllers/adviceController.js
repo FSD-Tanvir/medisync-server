@@ -20,8 +20,6 @@ const deleteAdvice = async (req, res) => {
     res.send(result)
 }
 const updateAdvice = async (req, res) => {
-    console.log('update id...', req.params.id);
-    console.log('update data...', req.body);
     const updateInfo = req.body;
 
     const result = await Advice.findOneAndUpdate({ _id: req.params.id }, {
