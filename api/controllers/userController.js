@@ -1,4 +1,4 @@
-const User = require("../models/User")
+const User = require("../models/User");
 
 // get all user
 const getAllUsers = async (req, res) => {
@@ -8,6 +8,22 @@ const getAllUsers = async (req, res) => {
       status: true,
       message: "New user created successfully",
       data: users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: err.message,
+    });
+  }
+};
+// get single user
+const getSingleUser = async (req, res) => {
+  try {
+    const user = await User.findOne({email: req.params?.email});
+    res.status(200).json({
+      status: true,
+      message: "Single user gotten successfully",
+      data: user,
     });
   } catch (error) {
     res.status(500).json({
@@ -42,26 +58,26 @@ const postUser = async (req, res) => {
   }
 };
 // check the of role of user - if they are admin or normal user
-const checkRole = async (req, res) => {
-  try {
-    const userEmail = req.params?.email;
-    const user = await User.findOne({ email: userEmail });
-    let role;
-    if (user) {
-      role = user?.role === "user" ? "user" : "admin";
-    }
-    res.status(200).json({
-      status: true,
-      message: "Successfully got the role",
-      role: role,
-    });
-  } catch (err) {
-    res.status(500).json({
-      status: false,
-      message: err.message,
-    });
-  }
-};
+// const checkRole = async (req, res) => {
+//   try {
+//     const userEmail = req.params?.email;
+//     const user = await User.findOne({ email: userEmail });
+//     let role;
+//     if (user) {
+//       role = user?.role === "user" ? "user" : "admin";
+//     }
+//     res.status(200).json({
+//       status: true,
+//       message: "Successfully got the role",
+//       role: role,
+//     });
+//   } catch (err) {
+//     res.status(500).json({
+//       status: false,
+//       message: err.message,
+//     });
+//   }
+// };
 
 // delete many
 // const deleteAllUsers = async(req, res)=>{
@@ -83,5 +99,5 @@ const checkRole = async (req, res) => {
 module.exports = {
   getAllUsers,
   postUser,
-  checkRole,
+  getSingleUser
 };
