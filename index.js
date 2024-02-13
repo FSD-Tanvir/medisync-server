@@ -1,6 +1,30 @@
 const express = require("express");
 const app = express();
+// socket.io
+const http = require("http");
+
 const cors = require("cors");
+
+// socket.io
+const { Server } = require("socket.io");
+// socket.io
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
+  });
+});
+
 const mongoose = require("mongoose");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
@@ -29,8 +53,10 @@ const jobRoutes = require("./api/routes/jobRoutes");
 const productRoutes = require("./api/routes/productsRoutes");
 const doctorRoutes = require("./api/routes/doctorRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
+const productCartRoutes = require("./api/routes/productCartRoute")
 
 app.use("/allProducts", productRoutes);
+app.use("/productCart",productCartRoutes);
 app.use("/users", userRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/doctors", doctorRoutes);
@@ -49,6 +75,11 @@ app.use("/", adviceRoutes);
 
 app.get("/", (req, res) => {
   res.send("medisync project is running");
+});
+
+// socket.io
+server.listen(5001, () => {
+  console.log(`server is running`);
 });
 
 app.listen(port, () => {

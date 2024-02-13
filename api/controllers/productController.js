@@ -1,5 +1,7 @@
-const Product = require('../models/Products')
+const Product = require('../models/products')
 
+
+// get all products
 const getAllProducts = async (req, res) => {
     try {
         const category = req.query.category
@@ -16,6 +18,19 @@ const getAllProducts = async (req, res) => {
     }
 }
 
+
+const singelProductItem = async (req, res) => {
+    const productId = req.params.id
+    try {
+      const product = await Product.findById(productId);
+      res.status(200).json(product);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
+  
+
 module.exports = {
-    getAllProducts
+    getAllProducts,singelProductItem
 }
