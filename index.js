@@ -20,6 +20,14 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+  });
+
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
   socket.on("disconnect", () => {
     console.log("User Disconnected", socket.id);
   });
@@ -53,6 +61,8 @@ const jobRoutes = require("./api/routes/jobRoutes");
 const productRoutes = require("./api/routes/productsRoutes");
 const doctorRoutes = require("./api/routes/doctorRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
+const chatRoute = require("./api/routes/chatRoute");
+const messageRoute = require("./api/routes/messageRoute");
 
 app.use("/allProducts", productRoutes);
 app.use("/users", userRoutes);
@@ -63,6 +73,8 @@ app.use("/newAndArticles", newsAndArticles);
 app.use("/newAndArticles/addArticle", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/", newsAndArticles);
+app.use("/chats", chatRoute);
+app.use("/messages", messageRoute);
 // end import route here
 
 app.get("/", (req, res) => {
@@ -70,10 +82,10 @@ app.get("/", (req, res) => {
 });
 
 // socket.io
-server.listen(5001, () => {
-  console.log(`server is running`);
+server.listen(port, () => {
+  console.log(`server is running on port ${port}`);
 });
 
-app.listen(port, () => {
-  console.log(`medisync running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`medisync running on port ${port}`);
+// });
