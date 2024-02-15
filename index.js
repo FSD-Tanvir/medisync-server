@@ -58,6 +58,7 @@ const productCartRoutes = require("./api/routes/productCartRoute")
 app.use("/allProducts", productRoutes);
 app.use("/productCart",productCartRoutes);
 app.use("/users", userRoutes);
+app.use("/users", userRoutes);
 app.use("/jobs", jobRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/newAndArticles", newsAndArticles);
