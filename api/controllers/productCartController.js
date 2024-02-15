@@ -17,7 +17,7 @@ const addtoCart = async (req, res) => {
     const { productItemId,quintity, name, weight, company, image, price,totalPrice, email } = req.body
     try {
         // existing product item
-        const existingProductItem = await ProductCarts.findOne({ productItemId })
+        const existingProductItem = await ProductCarts.findOne({ email,productItemId })
         if (existingProductItem) {
             return res.status(400).json({ message: "Product alredy exist alredy on the cart" })
         }
