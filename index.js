@@ -67,13 +67,6 @@ const messageRoute = require("./api/routes/messageRoute");
 const productCartRoutes = require("./api/routes/productCartRoute");
 
 
-const chatRoute = require("./api/routes/chatRoute");
-const messageRoute = require("./api/routes/messageRoute");
-
-const productCartRoutes = require("./api/routes/productCartRoute")
-
-
-
 app.use("/allProducts", productRoutes);
 app.use("/productCart", productCartRoutes);
 app.use("/users", userRoutes);
