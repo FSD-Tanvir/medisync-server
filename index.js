@@ -56,6 +56,7 @@ mongoose
 // start import route here
 
 const userRoutes = require("./api/routes/userRoutes");
+const usersRoutes = require("./api/routes/usersRoutes")
 const adviceRoutes = require("./api/routes/adviceRoutes");
 const jobRoutes = require("./api/routes/jobRoutes");
 const productRoutes = require("./api/routes/productsRoutes");
@@ -67,17 +68,12 @@ const messageRoute = require("./api/routes/messageRoute");
 const productCartRoutes = require("./api/routes/productCartRoute");
 
 
-const chatRoute = require("./api/routes/chatRoute");
-const messageRoute = require("./api/routes/messageRoute");
-
-const productCartRoutes = require("./api/routes/productCartRoute")
-
-
 
 app.use("/allProducts", productRoutes);
 app.use("/productCart", productCartRoutes);
 app.use("/users", userRoutes);
-app.use("/users", userRoutes);
+app.use("/users/all-users", usersRoutes);
+app.use("/", usersRoutes)
 app.use("/jobs", jobRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/newAndArticles", newsAndArticles);
