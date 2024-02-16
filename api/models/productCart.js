@@ -21,7 +21,7 @@ const productCartSchema = new Schema({
         type: String,
         trim: true,
         required: true,
-    }
+    },
 })
 
 const ProductCarts = mongoose.model("ProductCart",productCartSchema)
