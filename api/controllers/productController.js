@@ -47,22 +47,6 @@ const addToProduct = async (req, res) => {
 }
 
 
-// // update single job
-// const updateSingleJob = async (req, res) => {
-//     try {
-//         const updatedJob = req.body;
-//         await Job.updateOne({ _id: req.params.id }, { $set: { ...updatedJob } });
-//         res.status(200).json({
-//             status: true,
-//             message: "Job data updated successfully",
-//         });
-//     } catch (err) {
-//         res.status(500).json({
-//             status: false,
-//             message: err.message,
-//         });
-//     }
-// };
 
 const updateSingleProduct = async (req, res) => {
     try {
