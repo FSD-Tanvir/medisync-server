@@ -46,14 +46,15 @@ const addToProduct = async (req, res) => {
     }
 }
 
-// post a new job
-// const postSingleJob = async (req, res) => {
+
+// // update single job
+// const updateSingleJob = async (req, res) => {
 //     try {
-//         const newJob = new Job(req.body);
-//         await newJob.save();
-//         res.status(201).json({
+//         const updatedJob = req.body;
+//         await Job.updateOne({ _id: req.params.id }, { $set: { ...updatedJob } });
+//         res.status(200).json({
 //             status: true,
-//             message: "jobs data inserted successfully",
+//             message: "Job data updated successfully",
 //         });
 //     } catch (err) {
 //         res.status(500).json({
@@ -62,6 +63,22 @@ const addToProduct = async (req, res) => {
 //         });
 //     }
 // };
+
+const updateSingleProduct = async (req, res) => {
+    try {
+        const updateProduct = req.body
+        await Product.updateOne({ _id: req.params.id }, { $set: { ...updateProduct } })
+        res.status(200).json({
+            status: true,
+            message: "Product data update successfully",
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            message: error.message,
+        });
+    }
+}
 
 
 //  delete product
@@ -80,5 +97,9 @@ const deleteProduct = async (req, res) => {
 
 
 module.exports = {
-    getAllProducts, singelProductItem,addToProduct, deleteProduct
+    getAllProducts,
+    singelProductItem,
+    addToProduct,
+    deleteProduct,
+    updateSingleProduct
 }
