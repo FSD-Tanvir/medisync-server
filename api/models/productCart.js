@@ -15,7 +15,7 @@ const productCartSchema = new Schema({
     company: String,
     image: String,
     price: Number,
-    quintity:Number,
+    quantity:Number,
     totalPrice:Number,
     email: {
         type: String,

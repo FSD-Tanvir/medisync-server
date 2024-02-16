@@ -25,7 +25,7 @@ const getSingleUser = async (req, res) => {
       message: "Single user gotten successfully",
       data: user,
     });
-  } catch (error) {
+  } catch (err) {
     res.status(500).json({
       status: false,
       message: err.message,
