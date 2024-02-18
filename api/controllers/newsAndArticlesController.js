@@ -32,10 +32,7 @@ const deleteArticle = async (req, res) => {
 };
 
 const updateArticle = async (req, res) => {
-  console.log("update id...", req.params.id);
-  console.log("update data...", req.body);
   const updateInfo = req.body;
-  console.log(updateInfo);
 
   const result = await NewsAndArticles.findOneAndUpdate(
     { _id: req.params.id },
