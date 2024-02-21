@@ -2,7 +2,12 @@ const Doctor = require("../models/doctor");
 
 const getAllDoctors = async (req, res) => {
   try {
-    const doctors = await Doctor.find({});
+
+    
+     const search = req.query?.search || ""
+
+    // console.log("query",query)
+    const doctors = await Doctor.find({name: {$regex: search, $options:"i"}});
     res.status(200).json(doctors);
   } catch (error) {
     res.status(500).json({ message: error.message });

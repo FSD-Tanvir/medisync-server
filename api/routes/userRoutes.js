@@ -8,6 +8,7 @@ router.get('/all',  userController.getAllUsers)
 router.get('/single-user/:email',  userController.getSingleUser)
 // router.get('/',  userController.getAllUsers)
 router.post('/create-user/:email', userController.postUser)
+router.put('/update-user/:email', userController.updateUser)
 // router.get('/check-role/:email', userController.checkRole)
 
 // delete many 
