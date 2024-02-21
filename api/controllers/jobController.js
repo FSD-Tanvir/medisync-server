@@ -19,6 +19,18 @@ const getAllJobs = async (req, res) => {
 // get a job with id
 const getSingleJob = async (req, res) => {
   try {
+    // get only title and id
+    if (req.query.title_Id) {
+      const titleAndId = await Job.findOne({ _id: req.params.id }).select({
+        title: 1,
+      });
+      return res.status(200).json({
+        status: true,
+        message: "Title and Id gotten successfully",
+        titleAndId,
+      });
+    }
+
     const job = await Job.findOne({ _id: req.params.id });
     res.status(200).json({
       status: true,

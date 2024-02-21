@@ -5,6 +5,11 @@ const Product = require('../models/products')
 const getAllProducts = async (req, res) => {
     try {
         const category = req.query.category
+        const search = req.query?.search || ""
+        if(req.query?.search){
+            const searchesProducts = await Product.find({name: {$regex:search, $options:"i"}})
+           return res.status(200).json(searchesProducts)
+        }
         if (category === 'all') {
             const products = await Product.find({})
             res.status(200).json(products)
