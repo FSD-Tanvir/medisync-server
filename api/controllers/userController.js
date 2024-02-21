@@ -57,6 +57,26 @@ const postUser = async (req, res) => {
     });
   }
 };
+
+// update user 
+const updateUser = async (req,res)=>{
+  
+  try{
+    const userEmail = req.params.email
+  const acknowledgement = await User.updateOne({email:userEmail},{$set:{...req.body}})
+  res.status(201).json({
+    status:true,
+    message:"Profile updated successfully",
+    acknowledgement
+  })
+  }catch(err){
+    res.status(500).json({
+      status:false,
+      message: err.message
+    })
+  }
+}
+
 // check the of role of user - if they are admin or normal user
 // const checkRole = async (req, res) => {
 //   try {
@@ -99,5 +119,6 @@ const postUser = async (req, res) => {
 module.exports = {
   getAllUsers,
   postUser,
+  updateUser,
   getSingleUser
 };
