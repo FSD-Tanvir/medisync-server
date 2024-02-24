@@ -3,7 +3,8 @@ const Job = require("../models/job");
 // get all jobs
 const getAllJobs = async (req, res) => {
   try {
-    const jobsData = await Job.find();
+    const search = req.query.search || ""
+    const jobsData = await Job.find({title: {$regex:search, $options:"i"}});
     res.status(200).json({
       status: true,
       data: jobsData,
