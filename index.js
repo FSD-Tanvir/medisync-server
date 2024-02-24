@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
-// sslcommerce
-const SSLCommerzPayment = require('sslcommerz-lts')
+
 // socket.io
 const http = require("http");
 const cors = require("cors");
@@ -42,10 +41,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// sslCommerz store id/password
-const store_id = process.env.STORE_ID
-const store_passwd = process.env.STORE_PASS
-const is_live = false //true for live, false for sandbox
+
 
 mongoose
   .connect(
