@@ -12,12 +12,12 @@ const is_live = false //true for live, false for sandbox
 const postPaymet = async (req, res) => {
     // console.log(req.body)
     const order = req.body
-    const tran_id = new ObjectId().toString()
+    const tranId = new ObjectId().toString()
     const data = {
         total_amount: order?.subTotal,
         currency: order?.currency,
-        tran_id: tran_id, // use unique tran_id for each api call
-        success_url: 'http://localhost:3030/success',
+        tran_id: tranId, // use unique tran_id for each api call
+        success_url: `http://localhost:5000/allOrders/payment/success/${tranId}`,
         fail_url: 'http://localhost:3030/fail',
         cancel_url: 'http://localhost:3030/cancel',
         ipn_url: 'http://localhost:3030/ipn',
@@ -60,6 +60,11 @@ const postPaymet = async (req, res) => {
 
 }
 
+const tranId = async (req, res) => {
+    console.log(req.params.tranId)
+    
+}
+
 module.exports = {
-    postPaymet
+    postPaymet,tranId
 }
