@@ -62,6 +62,7 @@ const jobRoutes = require("./api/routes/jobRoutes");
 const jobApplicationRoutes = require("./api/routes/jobApplicationRoutes");
 const productRoutes = require("./api/routes/productsRoutes");
 const doctorRoutes = require("./api/routes/doctorRoutes");
+const doctorAppointmentRoutes = require("./api/routes/doctorAppointmentRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
 
 const chatRoute = require("./api/routes/chatRoute");
@@ -77,6 +78,7 @@ app.use("/", usersRoutes)
 app.use("/jobs", jobRoutes);
 app.use("/jobApplications",jobApplicationRoutes);
 app.use("/doctors", doctorRoutes);
+app.use("/doctorAppointments", doctorAppointmentRoutes)
 app.use("/newAndArticles", newsAndArticles);
 
 app.use("/newAndArticles/addArticle", newsAndArticles);

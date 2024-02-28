@@ -52,7 +52,6 @@ const getAllUsers = async (req, res) => {
         endDate = new Date();
         endDate.setHours(23,59,59,999)
     }
-    const query = {}
     if (req.query.filter) {
       const userStatistics = await UserStatistic.find({date: {$gte:startDate, $lte:endDate}}).sort({date:1})
       // console.log(userStatistics);
@@ -70,7 +69,7 @@ const getAllUsers = async (req, res) => {
 
       // console.log(users);
       return res.status(200).json({
-        message:true,
+        status:true,
         increase,
         decrease,
         percentageIncrease,
@@ -94,7 +93,7 @@ const getAllUsers = async (req, res) => {
 // get single user
 const getSingleUser = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params?.email });
+    const user = await User.findOne({ email: req.params?.email }).populate("appointments","date timeSlot doctorId");
     res.status(200).json({
       status: true,
       message: "Single user gotten successfully",
