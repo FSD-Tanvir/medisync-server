@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
+
 // socket.io
 const http = require("http");
-
 const cors = require("cors");
 
 // socket.io
@@ -38,9 +38,10 @@ require("dotenv").config();
 const port = process.env.PORT || 5000;
 
 // middleware
-
 app.use(cors());
 app.use(express.json());
+
+
 
 mongoose
   .connect(
@@ -64,10 +65,11 @@ const productRoutes = require("./api/routes/productsRoutes");
 const doctorRoutes = require("./api/routes/doctorRoutes");
 const doctorAppointmentRoutes = require("./api/routes/doctorAppointmentRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
-
 const chatRoute = require("./api/routes/chatRoute");
 const messageRoute = require("./api/routes/messageRoute");
 const productCartRoutes = require("./api/routes/productCartRoute");
+const { log } = require("console");
+const sslCommerzRoute = require('./api/routes/sslCommerzRoute')
 
 
 app.use("/allProducts", productRoutes);
@@ -80,21 +82,19 @@ app.use("/jobApplications",jobApplicationRoutes);
 app.use("/doctors", doctorRoutes);
 app.use("/doctorAppointments", doctorAppointmentRoutes)
 app.use("/newAndArticles", newsAndArticles);
-
 app.use("/newAndArticles/addArticle", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/chats", chatRoute);
 app.use("/messages", messageRoute);
-
 app.use("/chats", chatRoute);
 app.use("/messages", messageRoute);
-
-
 app.use("/advices", adviceRoutes);
 app.use("/advices/addAdvice", adviceRoutes);
 app.use("/", adviceRoutes);
-app.use("/", adviceRoutes);
+app.use("/allOrders",sslCommerzRoute)
+
+
 
 
 // end import route here
@@ -108,6 +108,4 @@ server.listen(port, () => {
   console.log(`server is running on port ${port}`);
 });
 
-// app.listen(port, () => {
-//   console.log(`medisync running on port ${port}`);
-// });
+
