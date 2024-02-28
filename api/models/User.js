@@ -23,6 +23,12 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  appointments:[
+    {
+      type:mongoose.Types.ObjectId,
+      ref:"DoctorAppointment",
+    }
+  ]
 });
 
 // create a model instance
