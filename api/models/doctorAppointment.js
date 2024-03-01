@@ -16,7 +16,23 @@ const doctorAppointmentSchema = new Schema({
         maxlength:14,
         required:true,
     },
+    userEmail:{
+        type:String,
+        required:true,
+    },
+    currency:{
+        type:String,
+        required:true,
+    },
     doctorId:{
+        type:String,
+        required:true,
+    },
+    paidStatus:{
+        type:Boolean,
+        default:false,
+    },
+    transactionId:{
         type:String,
         required:true,
     },
@@ -24,26 +40,16 @@ const doctorAppointmentSchema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: "User",
     },
+    totalAppointments:{
+        type: Number,
+        default:0
+    },
     applicationDate: {
         type:Date,
         default:Date.now
     },
-    totalAppointments:{
-        type: Number,
-        default:0
-    }
 
 })
-// middleware to update totalAppointments fields when new appointment saved 
-// doctorAppointmentSchema.post("save", async()=>{
-//     const totalAppointments = await this.model("DoctorAppointment").countDocuments();
-//     await this.model("DoctorAppointment").updateOne({}, {$set:{totalAppointments}})
-// })
-// middleware to update totalAppointments fields when an appointment deleted
-// doctorAppointmentSchema.post("deleteOne", async()=>{
-//     const totalAppointments = await this.model("DoctorAppointment").countDocuments();
-//     await this.model("DoctorAppointment").updateOne({},{$set:{totalAppointments}})
-// }) 
 
 const DoctorAppointment =  mongoose.model("DoctorAppointment", doctorAppointmentSchema)
 
