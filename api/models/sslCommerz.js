@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const sslCommerzSchema = new Schema({
-    orderId: { type: String, required: true, unique: true },
+    // orderId: { type: String, required: true, unique: true },
     products: [{
         _id: { type: String, required: true },
         productItemId: { type: String, required: true },
