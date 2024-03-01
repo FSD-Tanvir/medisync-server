@@ -1,68 +1,106 @@
+const express = require("express");
+const app = express();
+require("dotenv").config();
+// const { google } = require("googleapis");
+// const { OAuth2Client } = require("google-auth-library");
+// const clientSecrets = require("../../client_secret_770021927101-sf7638qf4kb5c6uq9j8akjhgp51p3rsf.apps.googleusercontent.com.json");
+const { ObjectId } = require("mongoose").Types;
+const cors = require("cors");
+
+const SSLCommerzPayment = require("sslcommerz-lts");
+const store_id = "teamp65d7090b9e99f";
+const store_passwd = "teamp65d7090b9e99f@ssl";
+const is_live = false; //true for live, false for sandbox
+
 const User = require("../models/User");
 const DoctorAppointment = require("../models/doctorAppointment");
 
-// function for update totalAppointments filed on appointment saved or delete 
-const updateTotalAppointmentStatistics = async(id) =>{
+// const oAuth2Client = new OAuth2Client(
+//   clientSecrets.web.client_id,
+//   clientSecrets.web.client_secret
+// );
+
+// const redirectUri =
+//   "http://localhost:5000/doctorAppointments/google/auth/callback";
+
+// const authUrl = oAuth2Client.generateAuthUrl({
+//   access_type: "offline",
+//   scope: ["https://www.googleapis.com/auth/calendar.events"],
+//   redirect_uri: redirectUri,
+// });
+
+// // google calender api setup
+// const calendar = google.calendar({
+//   version: "v3",
+//   auth: process.env.GOOGLE_API_KEY,
+// });
+
+// function for update totalAppointments filed on appointment saved or delete
+const updateTotalAppointmentStatistics = async (id) => {
   const totalAppointments = await DoctorAppointment.countDocuments();
-  await DoctorAppointment.updateOne({_id:id},{$set:{totalAppointments}})
-}
+  await DoctorAppointment.updateOne(
+    { _id: id },
+    { $set: { totalAppointments } }
+  );
+};
 
-
-// save appointment
+// get all appointments
 const getAllAppointments = async (req, res) => {
-  
- try {
-  let startDate, endDate;
-  switch (req.query.filter) {
-    case "all_day":
-      startDate = new Date(1900, 0, 1);
-      startDate.setHours(0, 0, 0, 0);
-      endDate = new Date();
-      break;
-    case "today":
-      startDate = new Date();
-      startDate.setHours(0, 0, 0, 0);
-      endDate = new Date();
-      endDate.setHours(23, 59, 59, 999);
-      break;
-    case "week":
-      startDate = new Date();
-      startDate.setDate(startDate.getDate() - 7);
-      startDate.setHours(0, 0, 0, 0);
-      endDate = new Date();
-      break;
-    case "month":
-      startDate = new Date();
-      startDate.setMonth(startDate.getMonth() - 1);
-      startDate.setDate(1);
-      startDate.setHours(0, 0, 0, 0);
-      endDate = new Date();
-      break;
-    case "year":
-      startDate = new Date();
-      startDate.setFullYear(startDate.getFullYear() - 1);
-      startDate.setMonth(0);
-      startDate.setDate(1);
-      startDate.setHours(0, 0, 0, 0);
-      endDate = new Date();
-      break;
-    default:
-      startDate = new Date();
-      startDate.setHours(0, 0, 0, 0);
-      endDate = new Date();
-      endDate.setHours(23, 59, 59, 999);
-  }
- 
+  try {
+    let startDate, endDate;
+    switch (req.query.filter) {
+      case "all_day":
+        startDate = new Date(1900, 0, 1);
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date();
+        break;
+      case "today":
+        startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date();
+        endDate.setHours(23, 59, 59, 999);
+        break;
+      case "week":
+        startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date();
+        break;
+      case "month":
+        startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+        startDate.setDate(1);
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date();
+        break;
+      case "year":
+        startDate = new Date();
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        startDate.setMonth(0);
+        startDate.setDate(1);
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date();
+        break;
+      default:
+        startDate = new Date();
+        startDate.setHours(0, 0, 0, 0);
+        endDate = new Date();
+        endDate.setHours(23, 59, 59, 999);
+    }
+
     if (req.query.filter) {
       const appointmentStatistics = await DoctorAppointment.find({
         applicationDate: { $gte: startDate, $lte: endDate },
       }).sort({ applicationDate: 1 });
       // get initial total appointments
       const initialTotalAppointments =
-      appointmentStatistics.length > 0 ? appointmentStatistics[0].totalAppointments : 0;
+        appointmentStatistics.length > 0
+          ? appointmentStatistics[0].totalAppointments
+          : 0;
       const finalTotalAppointments =
-      appointmentStatistics.length > 0
-          ? appointmentStatistics[appointmentStatistics.length - 1].totalAppointments
+        appointmentStatistics.length > 0
+          ? appointmentStatistics[appointmentStatistics.length - 1]
+              .totalAppointments
           : 0;
       // get increase & decrease
       const increase = finalTotalAppointments - initialTotalAppointments;
@@ -104,6 +142,9 @@ const getAllAppointments = async (req, res) => {
 
 // save appointment
 const saveAppointment = async (req, res) => {
+  const tran_id = new ObjectId().toString();
+  const orderInfo = req.body;
+
   try {
     const isExist = await DoctorAppointment.findOne({
       user: req.params.id,
@@ -111,54 +152,156 @@ const saveAppointment = async (req, res) => {
       date: req.body?.date,
     });
     if (isExist) {
-      return res
-        .status(403)
-        .json({
-          status: false,
-          message: "You have already booked this slot and date",
-          data: isExist,
-        });
+      return res.status(403).json({
+        status: false,
+        message: "You have already booked this slot and date",
+        data: isExist,
+      });
     }
+    const data = {
+      total_amount: 150,
+      currency: orderInfo?.currency,
+      tran_id: tran_id, // use unique tran_id for each api call
+      success_url: `http://localhost:5000/doctorAppointments/payment/success/${tran_id}`,
+      fail_url: `http://localhost:5000/doctorAppointments/payment/failed/${tran_id}`,
+      cancel_url: `http://localhost:5000/doctorAppointments/payment/canceled/${tran_id}?cancel=${true}`,
+      ipn_url: "http://localhost:3030/ipn",
+      shipping_method: "Email",
+      product_name: "Appointment",
+      product_category: "Electronic",
+      product_profile: "general",
+      cus_name: "Customer Name",
+      cus_email: orderInfo?.userEmail,
+      cus_add1: "Dhaka",
+      cus_add2: "Dhaka",
+      cus_city: "Dhaka",
+      cus_state: "Dhaka",
+      cus_postcode: "1000",
+      cus_country: "Bangladesh",
+      cus_phone: orderInfo?.mobileNumber,
+      cus_fax: "01711111111",
+      ship_name: "Customer Name",
+      ship_add1: "Dhaka",
+      ship_add2: "Dhaka",
+      ship_city: "Dhaka",
+      ship_state: "Dhaka",
+      ship_postcode: 1000,
+      ship_country: "Bangladesh",
+    };
 
-    // const receivedDate = new Date(req.body.date);
-    // const utcDate = receivedDate.toISOString();
+    // console.log(data)
+    const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
+    sslcz.init(data).then(async (apiResponse) => {
+      // Redirect the user to payment gateway
+      let GatewayPageURL = apiResponse.GatewayPageURL;
 
-    // date:utcDate
+      // save appointment on database
+      const newDoctorAppointment = new DoctorAppointment({
+        ...req.body,
+        user: req.params.id,
+        transactionId: tran_id,
+      });
 
-    const newDoctorAppointment = new DoctorAppointment({
-      ...req.body,
-      user: req.params.id,
-    });
+      const appointment = await newDoctorAppointment.save();
 
-    const appointment = await newDoctorAppointment.save();
+      // update totalAppointments field
+      await updateTotalAppointmentStatistics(appointment?._id);
 
-    // update totalAppointments field 
-    await updateTotalAppointmentStatistics(appointment?._id)
-
-    // push appointment id on the user appointments field 
-    await User.updateOne(
-      { _id: req.params.id },
-      {
-        $push: {
-          appointments: appointment?._id,
-        },
+      // push appointment id on the user appointments field
+      await User.updateOne(
+        { _id: req.params.id },
+        {
+          $push: {
+            appointments: appointment?._id,
+          },
+        }
+      );
+      if (appointment) {
+        res.send({ url: GatewayPageURL });
       }
-    );
 
-    res.status(201).json({
-      status: true,
-      message: "Appointment saved successfully",
-      appointment,
+      // console.log("Redirecting to: ", GatewayPageURL);
     });
+
+    // res.status(201).json({
+    //   status: true,
+    //   message: "Appointment saved successfully",
+    //   appointment,
+    // });
   } catch (err) {
+    console.log("Error initiating payment", err);
     res.status(500).json({
       status: false,
-      message: err,
+      message: "Error initiating payment",
+    });
+  }
+};
+
+// update appointment paidStatus field after successfully payment
+const updateAppointment = async (req, res) => {
+  // for generating dynamic Request Id
+  const dynamicRequestId = Date.now().toString();
+
+  try {
+    const appointment = await DoctorAppointment.updateOne(
+      { transactionId: req.params.tran_id },
+      { $set: { paidStatus: true } }
+    );
+    if (appointment.modifiedCount > 0) {
+      res.redirect(
+        `http://localhost:5173/payment/success/${req.params.tran_id}`
+      );
+    }
+    // console.log(appointment);
+  } catch (err) {
+    console.log("Error initiating payment", err);
+    res.status(500).json({
+      status: false,
+      message: "Error initiating payment",
+    });
+  }
+};
+// delete appointment if payment canceled or failed
+const deleteAppointment = async (req, res) => {
+  try {
+    const deletedAppointment = await DoctorAppointment.findOneAndDelete({
+      transactionId: req.params.tran_id,
+    });
+
+    if (!deletedAppointment) {
+      return res.status(404).json({
+        status: false,
+        message: "Appointment not found",
+      });
+    }
+
+    // remove appointment Id from user "appointments field" - after her appointment is deleted
+    await User.updateOne(
+      { _id: deletedAppointment.user },
+      { $pull: { appointments: deletedAppointment._id } }
+    );
+
+    // checking - is order canceled - redirect to cancel page if payment failed
+    if (req.query.cancel) {
+      res.redirect(`http://localhost:5173/payment/canceled`);
+    }
+    // handle redirect to fail page if payment failed
+    else {
+      res.redirect(`http://localhost:5173/payment/failed`);
+    }
+    // console.log(result)
+  } catch (err) {
+    console.log("Error initiating payment", err);
+    res.status(500).json({
+      status: false,
+      message: "Error initiating payment",
     });
   }
 };
 
 module.exports = {
   saveAppointment,
+  updateAppointment,
+  deleteAppointment,
   getAllAppointments,
 };

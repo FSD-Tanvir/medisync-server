@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const DoctorAppointment = require("../models/doctorAppointment");
 const UserStatistic = require("../models/userStatistics");
 
 // function for update UserStatistics collection
@@ -93,7 +94,8 @@ const getAllUsers = async (req, res) => {
 // get single user
 const getSingleUser = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params?.email }).populate("appointments","date timeSlot doctorId");
+    const user = await User.findOne({ email: req.params?.email }).populate({path: "appointments",select:"date timeSlot doctorId"})
+    
     res.status(200).json({
       status: true,
       message: "Single user gotten successfully",
