@@ -59,7 +59,7 @@ const updateDoctor = async (req, res) => {
     });
   }
 };
-// update doctor
+// delete doctor
 const deleteDoctor = async (req, res) => {
   try {
     const result = await Doctor.deleteOne({_id: req.params.id})
