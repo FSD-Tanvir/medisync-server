@@ -15,29 +15,80 @@ const postPaymet = async (req, res) => {
     try {
         const order = req.body;
         const tranId = new ObjectId().toString();
-
+        // const data = {
+        //         products: order.products || [],
+        //         total_amount: order?.subTotal || 0,
+        //         currency: order?.currency || '',
+        //         tran_id: tranId,
+        //         success_url: `http://localhost:5000/allOrders/payment/success/${tranId}`,
+        //         fail_url: 'http://localhost:3030/fail',
+        //         cancel_url: 'http://localhost:3030/cancel',
+        //         ipn_url: 'http://localhost:3030/ipn',
+        //         user_name: order?.user_name || '',
+        //         user_email: order?.user_email || '',
+        //         location: order?.location || '',
+        //     };
         const data = {
-            products: order.products || [],
-            total_amount: order?.subTotal || 0,
-            currency: order?.currency || '',
-            tran_id: tranId,
-            success_url: `http://localhost:5000/allOrders/payment/success/${tranId}`,
+            total_amount: 100,
+            currency: 'BDT',
+            tran_id: 'REF123', // use unique tran_id for each api call
+            success_url: 'http://localhost:3030/success',
             fail_url: 'http://localhost:3030/fail',
             cancel_url: 'http://localhost:3030/cancel',
             ipn_url: 'http://localhost:3030/ipn',
-            user_name: order?.user_name || '',
-            user_email: order?.user_email || '',
-            location: order?.location || '',
+            shipping_method: 'Courier',
+            product_name: 'Computer.',
+            product_category: 'Electronic',
+            product_profile: 'general',
+            cus_name: 'Customer Name',
+            cus_email: 'customer@example.com',
+            cus_add1: 'Dhaka',
+            cus_add2: 'Dhaka',
+            cus_city: 'Dhaka',
+            cus_state: 'Dhaka',
+            cus_postcode: '1000',
+            cus_country: 'Bangladesh',
+            cus_phone: '01711111111',
+            cus_fax: '01711111111',
+            ship_name: 'Customer Name',
+            ship_add1: 'Dhaka',
+            ship_add2: 'Dhaka',
+            ship_city: 'Dhaka',
+            ship_state: 'Dhaka',
+            ship_postcode: 1000,
+            ship_country: 'Bangladesh',
         };
-        // console.log(data)
         const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-        sslcz.init(data).then( async apiResponse => {
+        sslcz.init(data).then(apiResponse => {
             // Redirect the user to payment gateway
-            let GatewayPageURL =apiResponse.GatewayPageURL
-            res.send({url:GatewayPageURL})
+            let GatewayPageURL = apiResponse.GatewayPageURL
+            res.redirect(GatewayPageURL)
             console.log('Redirecting to: ', GatewayPageURL)
+        });
 
-        })
+        // const data = {
+        //     products: order.products || [],
+        //     total_amount: order?.subTotal || 0,
+        //     currency: order?.currency || '',
+        //     tran_id: tranId,
+        //     success_url: `http://localhost:5000/allOrders/payment/success/${tranId}`,
+        //     fail_url: 'http://localhost:3030/fail',
+        //     cancel_url: 'http://localhost:3030/cancel',
+        //     ipn_url: 'http://localhost:3030/ipn',
+        //     user_name: order?.user_name || '',
+        //     user_email: order?.user_email || '',
+        //     location: order?.location || '',
+        // };
+        // // console.log(data)
+        // const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
+        // sslcz.init(data).then( async apiResponse => {
+        //     // Redirect the user to payment gateway
+        //     let GatewayPageURL =apiResponse.GatewayPageURL
+        //     console.log('Redirecting to: ', GatewayPageURL)
+        //     res.send({url:GatewayPageURL})
+            
+
+        // })
         //    res.send({ url: GatewayPageURL });
         // const newOrder = new SSLCommerzModel({
         //     orderId: tranId,
@@ -59,7 +110,7 @@ const postPaymet = async (req, res) => {
         // console.log("After saving order to the database");
 
     } catch (error) {
-        console.error(error);
+        console.error('Error during SSLCommerzPayment initialization:', error);
         res.status(500).json({
             status: false,
             message: error.message,
