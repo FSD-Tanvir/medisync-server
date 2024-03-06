@@ -94,7 +94,7 @@ const getAllUsers = async (req, res) => {
 // get single user
 const getSingleUser = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params?.email }).populate({path: "appointments",select:"date timeSlot doctorId"})
+    const user = await User.findOne({ email: req.params?.email }).populate({path: "appointments",select:"date timeSlot doctorId meetingLinks"})
     
     res.status(200).json({
       status: true,

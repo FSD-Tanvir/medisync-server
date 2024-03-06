@@ -2,7 +2,9 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const sslCommerzSchema = new Schema({
-    // orderId: { type: String, required: true, unique: true },
+    orderId:{
+        type:String, required:true, unique:true
+    },
     products: [{
         _id: { type: String, required: true },
         productItemId: { type: String, required: true },
@@ -16,10 +18,16 @@ const sslCommerzSchema = new Schema({
     }],
     total_amount: { type: Number, required: true },
     currency: { type: String, required: true },
-    tran_id: { type: String},
+    transactionId: { type: String},
     user_name: { type: String, required: true },
     user_email: { type: String, required: true },
+    paidStatus: { type: Boolean, default:false },
+
     location:{ type: String, required: true },
+    orderDate:{
+        type:Date,
+        default:Date.now
+    }
 })
 
 // Create a Mongoose model
