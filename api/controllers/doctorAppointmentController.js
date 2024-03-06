@@ -162,9 +162,9 @@ const saveAppointment = async (req, res) => {
       total_amount: 150,
       currency: orderInfo?.currency,
       tran_id: tran_id, // use unique tran_id for each api call
-      success_url: `http://localhost:5000/doctorAppointments/payment/success/${tran_id}`,
-      fail_url: `http://localhost:5000/doctorAppointments/payment/failed/${tran_id}`,
-      cancel_url: `http://localhost:5000/doctorAppointments/payment/canceled/${tran_id}?cancel=${true}`,
+      success_url: `https://medisync-server.vercel.app/doctorAppointments/payment/success/${tran_id}`,
+      fail_url: `https://medisync-server.vercel.app/doctorAppointments/payment/failed/${tran_id}`,
+      cancel_url: `https://medisync-server.vercel.app/doctorAppointments/payment/canceled/${tran_id}?cancel=${true}`,
       ipn_url: "http://localhost:3030/ipn",
       shipping_method: "Email",
       product_name: "Appointment",
@@ -249,7 +249,7 @@ const updateAppointment = async (req, res) => {
     );
     if (appointment.modifiedCount > 0) {
       res.redirect(
-        `http://localhost:5173/payment/success/${req.params.tran_id}`
+        `https://cosmic-stroopwafel-b283d3.netlify.app/payment/success/${req.params.tran_id}`
       );
     }
     // console.log(appointment);
@@ -283,11 +283,11 @@ const deleteAppointment = async (req, res) => {
 
     // checking - is order canceled - redirect to cancel page if payment failed
     if (req.query.cancel) {
-      res.redirect(`http://localhost:5173/payment/canceled`);
+      res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/canceled`);
     }
     // handle redirect to fail page if payment failed
     else {
-      res.redirect(`http://localhost:5173/payment/failed`);
+      res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/failed`);
     }
     // console.log(result)
   } catch (err) {
