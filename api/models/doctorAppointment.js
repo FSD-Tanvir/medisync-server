@@ -36,6 +36,10 @@ const doctorAppointmentSchema = new Schema({
         type:String,
         required:true,
     },
+    meetingLinks:{
+        type:String,
+        default:''
+    },
     user:{
         type: mongoose.Types.ObjectId,
         ref: "User",
