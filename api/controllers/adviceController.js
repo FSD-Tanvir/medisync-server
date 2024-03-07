@@ -1,4 +1,4 @@
-const Advice = require('../models/advice')
+const Advice = require('../models/Advice')
 
 const getAllAdvices = async (req, res) => {
     try {

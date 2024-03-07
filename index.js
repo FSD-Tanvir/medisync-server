@@ -1,37 +1,7 @@
 const express = require("express");
 const app = express();
+const cors = require("cors"); 
 
-// socket.io
-const http = require("http");
-const cors = require("cors");
-
-// socket.io
-const { Server } = require("socket.io");
-// socket.io
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
-
-  socket.on("join_room", (data) => {
-    socket.join(data);
-    console.log(`User with ID: ${socket.id} joined room: ${data}`);
-  });
-
-  socket.on("send_message", (data) => {
-    socket.to(data.room).emit("receive_message", data);
-  });
-  socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id);
-  });
-});
 
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -65,8 +35,6 @@ const productRoutes = require("./api/routes/productsRoutes");
 const doctorRoutes = require("./api/routes/doctorRoutes");
 const doctorAppointmentRoutes = require("./api/routes/doctorAppointmentRoutes");
 const newsAndArticles = require("./api/routes/newsAndArticlesRoutes");
-const chatRoute = require("./api/routes/chatRoute");
-const messageRoute = require("./api/routes/messageRoute");
 const productCartRoutes = require("./api/routes/productCartRoute");
 const { log } = require("console");
 const sslCommerzRoute = require('./api/routes/sslCommerzRoute')
@@ -85,10 +53,6 @@ app.use("/newAndArticles", newsAndArticles);
 app.use("/newAndArticles/addArticle", newsAndArticles);
 app.use("/", newsAndArticles);
 app.use("/", newsAndArticles);
-app.use("/chats", chatRoute);
-app.use("/messages", messageRoute);
-app.use("/chats", chatRoute);
-app.use("/messages", messageRoute);
 app.use("/advices", adviceRoutes);
 app.use("/advices/addAdvice", adviceRoutes);
 app.use("/", adviceRoutes);
@@ -103,9 +67,6 @@ app.get("/", (req, res) => {
   res.send("medisync project is running");
 });
 
-// socket.io
-server.listen(port, () => {
-  console.log(`server is running on port ${port}`);
-});
+
 
 
