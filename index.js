@@ -18,18 +18,18 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  (`User Connected: ${socket.id}`);
 
   socket.on("join_room", (data) => {
     socket.join(data);
-    console.log(`User with ID: ${socket.id} joined room: ${data}`);
+    (`User with ID: ${socket.id} joined room: ${data}`);
   });
 
   socket.on("send_message", (data) => {
     socket.to(data.room).emit("receive_message", data);
   });
   socket.on("disconnect", () => {
-    console.log("User Disconnected", socket.id);
+    ("User Disconnected", socket.id);
   });
 });
 
@@ -47,9 +47,9 @@ mongoose
   .connect(
     `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.syrsapj.mongodb.net/?retryWrites=true&w=majority`
   )
-  .then(console.log("mongoose connected successfully"))
+  .then(("mongoose connected successfully"))
   .catch((error) => {
-    console.log("error connecting to mongodb", error);
+    ("error connecting to mongodb", error);
   });
 
 // import route here
@@ -105,7 +105,7 @@ app.get("/", (req, res) => {
 
 // socket.io
 server.listen(port, () => {
-  console.log(`server is running on port ${port}`);
+  (`server is running on port ${port}`);
 });
 
 

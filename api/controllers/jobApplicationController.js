@@ -3,7 +3,7 @@ const JobApplication = require("../models/JobApplication");
 const saveJobApplication = async(req,res) =>{
     try {
         const application = req.body;
-        console.log(req.body?.jobName)
+        (req.body?.jobName)
         // checking - if already applied or not 
         const isAlreadyApplied = await JobApplication.findOne({email:req.body?.email,jobName:req.body?.jobName})
         if(isAlreadyApplied){return res.status(403).json({status:false,message:"Already applied this job"})}

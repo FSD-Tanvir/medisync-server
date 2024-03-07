@@ -13,7 +13,7 @@ const createChat = async (req, res) => {
     const response = await newChat.save();
     res.status(200).json(response);
   } catch (error) {
-    console.log(error);
+    (error);
     res.status(500).json(error);
   }
 };
@@ -26,7 +26,7 @@ const findUserChats = async (req, res) => {
     });
     res.status(200).json(chats);
   } catch (error) {
-    console.log(error);
+    (error);
     res.status(500).json(error);
   }
 };
@@ -39,7 +39,7 @@ const findChat = async (req, res) => {
     });
     res.status(200).json(chat);
   } catch (error) {
-    console.log(error);
+    (error);
     res.status(500).json(error);
   }
 };

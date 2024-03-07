@@ -55,7 +55,7 @@ const getAllUsers = async (req, res) => {
     }
     if (req.query.filter) {
       const userStatistics = await UserStatistic.find({date: {$gte:startDate, $lte:endDate}}).sort({date:1})
-      // console.log(userStatistics);
+      // (userStatistics);
       // get initial total users 
       const initialTotalUsers = userStatistics.length > 0 ? userStatistics[0].totalUsers : 0;
       // get final total users 
@@ -68,7 +68,7 @@ const getAllUsers = async (req, res) => {
       const percentageIncrease = (increase === 0 && initialTotalUsers === 0) ?  (0 * 100).toFixed(2): ((increase/initialTotalUsers) * 100).toFixed(2)
       const percentageDecrease = (decrease === 0 && initialTotalUsers === 0) ? (0 * 100).toFixed(2): ((decrease/initialTotalUsers) * 100).toFixed(2)
 
-      // console.log(users);
+      // (users);
       return res.status(200).json({
         status:true,
         increase,
@@ -94,7 +94,7 @@ const getAllUsers = async (req, res) => {
 // get single user
 const getSingleUser = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.params?.email }).populate({path: "appointments",select:"date timeSlot doctorId"})
+    const user = await User.findOne({ email: req.params?.email }).populate({path: "appointments",select:"date timeSlot doctorId meetingLinks"})
     
     res.status(200).json({
       status: true,

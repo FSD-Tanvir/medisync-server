@@ -1,39 +1,17 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-// const { google } = require("googleapis");
-// const { OAuth2Client } = require("google-auth-library");
-// const clientSecrets = require("../../client_secret_770021927101-sf7638qf4kb5c6uq9j8akjhgp51p3rsf.apps.googleusercontent.com.json");
 const { ObjectId } = require("mongoose").Types;
+const axios = require("axios");
 const cors = require("cors");
 
 const SSLCommerzPayment = require("sslcommerz-lts");
 const store_id = "teamp65d7090b9e99f";
 const store_passwd = "teamp65d7090b9e99f@ssl";
-const is_live = true; //true for live, false for sandbox
+const is_live = false; //true for live, false for sandbox
 
 const User = require("../models/User");
 const DoctorAppointment = require("../models/doctorAppointment");
-
-// const oAuth2Client = new OAuth2Client(
-//   clientSecrets.web.client_id,
-//   clientSecrets.web.client_secret
-// );
-
-// const redirectUri =
-//   "http://localhost:5000/doctorAppointments/google/auth/callback";
-
-// const authUrl = oAuth2Client.generateAuthUrl({
-//   access_type: "offline",
-//   scope: ["https://www.googleapis.com/auth/calendar.events"],
-//   redirect_uri: redirectUri,
-// });
-
-// // google calender api setup
-// const calendar = google.calendar({
-//   version: "v3",
-//   auth: process.env.GOOGLE_API_KEY,
-// });
 
 // function for update totalAppointments filed on appointment saved or delete
 const updateTotalAppointmentStatistics = async (id) => {
@@ -140,6 +118,8 @@ const getAllAppointments = async (req, res) => {
   }
 };
 
+
+
 // save appointment
 const saveAppointment = async (req, res) => {
   const tran_id = new ObjectId().toString();
@@ -189,7 +169,7 @@ const saveAppointment = async (req, res) => {
       ship_country: "Bangladesh",
     };
 
-    // console.log(data)
+    // (data)
     const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
     sslcz.init(data).then(async (apiResponse) => {
       // Redirect the user to payment gateway
@@ -220,16 +200,10 @@ const saveAppointment = async (req, res) => {
         res.send({ url: GatewayPageURL });
       }
 
-      // console.log("Redirecting to: ", GatewayPageURL);
+      // ("Redirecting to: ", GatewayPageURL);
     });
-
-    // res.status(201).json({
-    //   status: true,
-    //   message: "Appointment saved successfully",
-    //   appointment,
-    // });
   } catch (err) {
-    console.log("Error initiating payment", err);
+    ("Error initiating payment", err);
     res.status(500).json({
       status: false,
       message: "Error initiating payment",
@@ -239,22 +213,37 @@ const saveAppointment = async (req, res) => {
 
 // update appointment paidStatus field after successfully payment
 const updateAppointment = async (req, res) => {
-  // for generating dynamic Request Id
-  const dynamicRequestId = Date.now().toString();
-
   try {
+    if (req.query.meetLinkUpdated) {
+      ("back-end")
+      ("meetingLinks",req.body.meetingLinks)
+      const appointment = await DoctorAppointment.updateOne(
+        { transactionId: req.params.tran_id },
+        { $set: { meetingLinks: req.body.meetingLinks } },
+        { new: true }
+      );
+      return res
+        .status(201)
+        .json({
+          status: true,
+          message: "Appointment updated successfully",
+          appointment,
+        });
+    }
+
     const appointment = await DoctorAppointment.updateOne(
       { transactionId: req.params.tran_id },
       { $set: { paidStatus: true } }
     );
+
     if (appointment.modifiedCount > 0) {
       res.redirect(
         `https://cosmic-stroopwafel-b283d3.netlify.app/payment/success/${req.params.tran_id}`
       );
     }
-    // console.log(appointment);
+    // (appointment);
   } catch (err) {
-    console.log("Error initiating payment", err);
+    ("Error initiating payment", err);
     res.status(500).json({
       status: false,
       message: "Error initiating payment",
@@ -289,9 +278,9 @@ const deleteAppointment = async (req, res) => {
     else {
       res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/failed`);
     }
-    // console.log(result)
+    // (result)
   } catch (err) {
-    console.log("Error initiating payment", err);
+    ("Error initiating payment", err);
     res.status(500).json({
       status: false,
       message: "Error initiating payment",
