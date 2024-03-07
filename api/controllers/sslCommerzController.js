@@ -56,9 +56,9 @@ const postPayment = async (req, res) => {
             total_amount: order.subTotal,
             currency: order?.currency,
             tran_id: tranId, // use unique tran_id for each api call
-            success_url: `https://medisync-server.vercel.app/payment/success/${tranId}?userEmail=${order.user_email}`,
-            fail_url: `https://medisync-server.vercel.app/payment/failed/${tranId}`,
-            cancel_url: `https://medisync-server.vercel.app/allOrders/payment/cancel/${tranId}?canceled=${true}`,
+            success_url: `http://localhost:5000/payment/success/${tranId}?userEmail=${order.user_email}`,
+            fail_url: `http://localhost:5000/payment/failed/${tranId}`,
+            cancel_url: `http://localhost:5000/allOrders/payment/cancel/${tranId}?canceled=${true}`,
             ipn_url: 'http://localhost:3030/ipn',
             shipping_method: 'Courier',
             product_name: 'Computer.',
@@ -84,6 +84,7 @@ const postPayment = async (req, res) => {
         };
         const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
         const sslresponse= await sslcz.init(data)
+        console.log(sslresponse)
         if(sslresponse.status === "SUCCESS"){
             let GatewayPageURL = sslresponse.GatewayPageURL
             const newOrder = new SSLCommerzModel({
@@ -150,7 +151,7 @@ const updateOrder = async (req, res) => {
         });
 
         if (result.modifiedCount > 0) {
-            res.redirect(`https://medisync-auth.web.app/order/success/${req.params.tranId}`);
+            res.redirect(`http://localhost:5173/order/success/${req.params.tranId}`);
         } else {
             res.status(404).json({
                 status: false,
@@ -173,9 +174,9 @@ const deleteOrder = async (req, res) => {
             return res.status(404).json({status:false,message:"Order not found"})
         }
         if (req.query.canceled) {
-            res.redirect(`https://medisync-auth.web.app/checkout`);
+            res.redirect(`http://localhost:5173/checkout`);
         } else {
-            res.redirect(`https://medisync-auth.web.app/checkout`);
+            res.redirect(`http://localhost:5173/checkout`);
         }
     } catch (error) {
         console.error(error);
