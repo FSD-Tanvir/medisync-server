@@ -12,7 +12,24 @@ const store_id = "teamp65d7090b9e99f";
 const store_passwd = "teamp65d7090b9e99f@ssl";
 const is_live = false; // true for live, false for sandbox
 
-// get all order - user specific 
+// get all orders
+const AllOrders = async (req,res)=>{
+    try{
+        const allOrders = await SSLCommerzModel.find()
+
+        res.status(200).json({
+            status:true,
+            message:"All orders gotten successfully",
+            allOrders,
+        })
+    }catch (err){
+        res.status(500).json({
+            status:false,
+            message:'Internal server error',err,
+        })
+    }
+}
+// get all orders - user specific 
 const getAllOrders = async (req,res)=>{
     try{
         const allOrders = await SSLCommerzModel.find({user_email:req.params.userEmail})
@@ -151,6 +168,7 @@ const deleteOrder = async (req, res) => {
 
 module.exports = {
     getAllOrders,
+    AllOrders,
     postPayment,
     updateOrder,
     deleteOrder,
