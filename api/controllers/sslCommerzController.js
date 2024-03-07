@@ -56,9 +56,9 @@ const postPayment = async (req, res) => {
             total_amount: order.subTotal,
             currency: order?.currency,
             tran_id: tranId, // use unique tran_id for each api call
-            success_url: `http://localhost:5000/allOrders/payment/success/${tranId}?userEmail=${order.user_email}`,
-            fail_url: `http://localhost:5000/allOrders/payment/failed/${tranId}`,
-            cancel_url: `http://localhost:5000/allOrders/payment/cancel/${tranId}?canceled=${true}`,
+            success_url: `https://medisync-server.vercel.app/payment/success/${tranId}?userEmail=${order.user_email}`,
+            fail_url: `https://medisync-server.vercel.app/payment/failed/${tranId}`,
+            cancel_url: `https://medisync-server.vercel.app/allOrders/payment/cancel/${tranId}?canceled=${true}`,
             ipn_url: 'http://localhost:3030/ipn',
             shipping_method: 'Courier',
             product_name: 'Computer.',
@@ -83,28 +83,48 @@ const postPayment = async (req, res) => {
             ship_country: 'Bangladesh',
         };
         const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-        sslcz.init(data).then(async apiResponse => {
-            // Redirect the user to payment gateway
+        const sslrespone= await sslcz.init(data)
+        if(sslresponse.status === "SUCCESS"){
             let GatewayPageURL = apiResponse.GatewayPageURL
+            const newOrder = new SSLCommerzModel({
+                orderId:tranId,
+                products: order.products,
+                total_amount: order.subTotal,
+                currency: order.currency,
+                user_name: order.user_name,
+                user_email: order.user_email,
+                location: order.location,
+                transactionId: tranId,
+            });
+    
+            const savedOrder = await newOrder.save();
+            console.log(savedOrder)
+            if(savedOrder){
+                res.json({ url: GatewayPageURL });
+            }
+        }
+        // .then(async apiResponse => {
+        //     // Redirect the user to payment gateway
+        //     let GatewayPageURL = apiResponse.GatewayPageURL
 
            
-        const newOrder = new SSLCommerzModel({
-            orderId:tranId,
-            products: order.products,
-            total_amount: order.subTotal,
-            currency: order.currency,
-            user_name: order.user_name,
-            user_email: order.user_email,
-            location: order.location,
-            transactionId: tranId,
-        });
+        // const newOrder = new SSLCommerzModel({
+        //     orderId:tranId,
+        //     products: order.products,
+        //     total_amount: order.subTotal,
+        //     currency: order.currency,
+        //     user_name: order.user_name,
+        //     user_email: order.user_email,
+        //     location: order.location,
+        //     transactionId: tranId,
+        // });
 
-        const savedOrder = await newOrder.save();
+        // const savedOrder = await newOrder.save();
 
-        if(savedOrder){
-            res.send({ url: GatewayPageURL });
-        }
-        });
+        // if(savedOrder){
+        //     res.send({ url: GatewayPageURL });
+        // }
+        // });
 
     } catch (error) {
         console.error('Error during SSLCommerzPayment initialization:', error);
@@ -130,7 +150,7 @@ const updateOrder = async (req, res) => {
         });
 
         if (result.modifiedCount > 0) {
-            res.redirect(`http://localhost:5173/order/success/${req.params.tranId}`);
+            res.redirect(`https://medisync-auth.web.app/order/success/${req.params.tranId}`);
         } else {
             res.status(404).json({
                 status: false,
@@ -153,9 +173,9 @@ const deleteOrder = async (req, res) => {
             return res.status(404).json({status:false,message:"Order not found"})
         }
         if (req.query.canceled) {
-            res.redirect(`http://localhost:5173/checkout`);
+            res.redirect(`https://medisync-auth.web.app/checkout`);
         } else {
-            res.redirect(`http://localhost:5173/checkout`);
+            res.redirect(`https://medisync-auth.web.app/checkout`);
         }
     } catch (error) {
         console.error(error);
