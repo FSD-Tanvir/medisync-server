@@ -8,9 +8,9 @@ const ProductCarts = require('../models/productCart');
 const app = express();
 
 
-const store_id = "teamp65d7090b9e99f";
-const store_passwd = "teamp65d7090b9e99f@ssl";
-const is_live = true; // true for live, false for sandbox
+const store_id = process.env.STORE_ID
+const store_passwd = process.env.STORE_PASS
+const is_live = false; // true for live, false for sandbox
 
 // get all orders
 const AllOrders = async (req,res)=>{
@@ -56,7 +56,7 @@ const postPayment = async (req, res) => {
             total_amount: order.subTotal,
             currency: order?.currency,
             tran_id: tranId, // use unique tran_id for each api call
-            success_url: `http://localhost:5000/payment/success/${tranId}?userEmail=${order.user_email}`,
+            success_url: `http://localhost:5000/allOrders/payment/success/${tranId}?userEmail=${order.user_email}`,
             fail_url: `http://localhost:5000/payment/failed/${tranId}`,
             cancel_url: `http://localhost:5000/allOrders/payment/cancel/${tranId}?canceled=${true}`,
             ipn_url: 'http://localhost:3030/ipn',
@@ -84,7 +84,7 @@ const postPayment = async (req, res) => {
         };
         const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
         const sslresponse= await sslcz.init(data)
-        console.log(sslresponse)
+        // console.log(sslresponse)
         if(sslresponse.status === "SUCCESS"){
             let GatewayPageURL = sslresponse.GatewayPageURL
             const newOrder = new SSLCommerzModel({
@@ -99,7 +99,7 @@ const postPayment = async (req, res) => {
             });
     
             const savedOrder = await newOrder.save();
-            console.log(savedOrder)
+            // console.log(savedOrder)
             if(savedOrder){
                 res.json({ url: GatewayPageURL });
             }
@@ -138,7 +138,7 @@ const postPayment = async (req, res) => {
 // update order after successfully payment
 const updateOrder = async (req, res) => {
     try {
-
+         console.log(req.query)
         // deleting all products from user cart after successfully ordered 
         if(req.query.userEmail){
             await ProductCarts.deleteMany({email:req.query.userEmail})
