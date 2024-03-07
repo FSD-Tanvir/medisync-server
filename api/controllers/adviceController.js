@@ -41,7 +41,7 @@ const updateAdvice = async (req, res) => {
     },
         { new: true }
     )
-    console.log('result', result);
+    ('result', result);
     res.send(result)
 }
 

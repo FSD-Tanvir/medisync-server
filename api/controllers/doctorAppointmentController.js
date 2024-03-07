@@ -143,9 +143,9 @@ const saveAppointment = async (req, res) => {
       total_amount: 150,
       currency: orderInfo?.currency,
       tran_id: tran_id, // use unique tran_id for each api call
-      success_url: `http://localhost:5000/doctorAppointments/payment/success/${tran_id}?startTime=${req.query.startTime}&userId=${req.params.id}`,
-      fail_url: `http://localhost:5000/doctorAppointments/payment/failed/${tran_id}`,
-      cancel_url: `http://localhost:5000/doctorAppointments/payment/canceled/${tran_id}?cancel=${true}`,
+      success_url: `https://medisync-server.vercel.app/doctorAppointments/payment/success/${tran_id}`,
+      fail_url: `https://medisync-server.vercel.app/doctorAppointments/payment/failed/${tran_id}`,
+      cancel_url: `https://medisync-server.vercel.app/doctorAppointments/payment/canceled/${tran_id}?cancel=${true}`,
       ipn_url: "http://localhost:3030/ipn",
       shipping_method: "Email",
       product_name: "Appointment",
@@ -170,7 +170,7 @@ const saveAppointment = async (req, res) => {
       ship_country: "Bangladesh",
     };
 
-    // console.log(data)
+    // (data)
     const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live);
     sslcz.init(data).then(async (apiResponse) => {
       // Redirect the user to payment gateway
@@ -201,10 +201,10 @@ const saveAppointment = async (req, res) => {
         res.send({ url: GatewayPageURL });
       }
 
-      // console.log("Redirecting to: ", GatewayPageURL);
+      // ("Redirecting to: ", GatewayPageURL);
     });
   } catch (err) {
-    console.log("Error initiating payment", err);
+    ("Error initiating payment", err);
     res.status(500).json({
       status: false,
       message: "Error initiating payment",
@@ -216,8 +216,8 @@ const saveAppointment = async (req, res) => {
 const updateAppointment = async (req, res) => {
   try {
     if (req.query.meetLinkUpdated) {
-      console.log("back-end")
-      console.log("meetingLinks",req.body.meetingLinks)
+      ("back-end")
+      ("meetingLinks",req.body.meetingLinks)
       const appointment = await DoctorAppointment.updateOne(
         { transactionId: req.params.tran_id },
         { $set: { meetingLinks: req.body.meetingLinks } },
@@ -239,12 +239,12 @@ const updateAppointment = async (req, res) => {
 
     if (appointment.modifiedCount > 0) {
       res.redirect(
-        `http://localhost:5173/payment/success/${req.params.tran_id}?startTime=${req.query.startTime}`
+        `https://cosmic-stroopwafel-b283d3.netlify.app/payment/success/${req.params.tran_id}`
       );
     }
-    // console.log(appointment);
+    // (appointment);
   } catch (err) {
-    console.log("Error initiating payment", err);
+    ("Error initiating payment", err);
     res.status(500).json({
       status: false,
       message: "Error initiating payment",
@@ -273,15 +273,23 @@ const deleteAppointment = async (req, res) => {
 
     // checking - is order canceled - redirect to cancel page if payment failed
     if (req.query.cancel) {
+
+      res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/canceled`);
+    }
+    // handle redirect to fail page if payment failed
+    else {
+      res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/failed`);
+
       res.redirect(`http://localhost:5173/`);
     }
     // handle redirect to fail page if payment failed
     else {
       res.redirect(`http://localhost:5173/`);
+
     }
-    // console.log(result)
+    // (result)
   } catch (err) {
-    console.log("Error initiating payment", err);
+    ("Error initiating payment", err);
     res.status(500).json({
       status: false,
       message: "Error initiating payment",

@@ -72,7 +72,7 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const {quantity,totalPrice} = req.body;
-    console.log(quantity,totalPrice)
+    (quantity,totalPrice)
     const updateResult = await ProductCarts.updateOne(
       { _id: req.params?.id },
       { $set: { quantity,totalPrice} }

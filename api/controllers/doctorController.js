@@ -6,7 +6,7 @@ const getAllDoctors = async (req, res) => {
     
      const search = req.query?.search || ""
 
-    // console.log("query",query)
+    // ("query",query)
     const doctors = await Doctor.find({name: {$regex: search, $options:"i"}});
     res.status(200).json(doctors);
   } catch (error) {
