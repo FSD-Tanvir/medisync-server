@@ -22,6 +22,7 @@ const sslCommerzSchema = new Schema({
     user_name: { type: String, required: true },
     user_email: { type: String, required: true },
     paidStatus: { type: Boolean, default:false },
+    orderStatus:{type:String,default:'pending'},
 
     location:{ type: String, required: true },
     orderDate:{

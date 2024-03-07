@@ -12,6 +12,7 @@ const is_live = false; //true for live, false for sandbox
 
 const User = require("../models/User");
 const DoctorAppointment = require("../models/doctorAppointment");
+  
 
 // function for update totalAppointments filed on appointment saved or delete
 const updateTotalAppointmentStatistics = async (id) => {
@@ -272,11 +273,11 @@ const deleteAppointment = async (req, res) => {
 
     // checking - is order canceled - redirect to cancel page if payment failed
     if (req.query.cancel) {
-      res.redirect(`http://localhost:5173/payment/canceled`);
+      res.redirect(`http://localhost:5173/`);
     }
     // handle redirect to fail page if payment failed
     else {
-      res.redirect(`http://localhost:5173/payment/failed`);
+      res.redirect(`http://localhost:5173/`);
     }
     // console.log(result)
   } catch (err) {
