@@ -251,7 +251,7 @@ const updateAppointment = async (req, res) => {
     });
   }
 };
-// delete appointment if payment canceled or failed
+
 const deleteAppointment = async (req, res) => {
   try {
     const deletedAppointment = await DoctorAppointment.findOneAndDelete({
@@ -273,29 +273,23 @@ const deleteAppointment = async (req, res) => {
 
     // checking - is order canceled - redirect to cancel page if payment failed
     if (req.query.cancel) {
-
       res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/canceled`);
     }
-    // handle redirect to fail page if payment failed
+    // Assuming you want to handle another condition here, you should either use `else if` for a specific condition
+    // or just an `else` for a general fallback. Make sure to correct logic according to your actual requirements.
     else {
-      res.redirect(`https://cosmic-stroopwafel-b283d3.netlify.app/payment/failed`);
-
+      // This block will execute if `req.query.cancel` is falsy, you might want to adjust the logic based on your requirements
       res.redirect(`http://localhost:5173/`);
     }
-    // handle redirect to fail page if payment failed
-    else {
-      res.redirect(`http://localhost:5173/`);
-
-    }
-    // (result)
   } catch (err) {
-    ("Error initiating payment", err);
+    console.error("Error initiating payment", err); // It's better to use console.error for errors
     res.status(500).json({
       status: false,
       message: "Error initiating payment",
     });
   }
 };
+
 
 module.exports = {
   saveAppointment,
