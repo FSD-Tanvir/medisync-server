@@ -10,7 +10,7 @@ const app = express();
 
 const store_id = "teamp65d7090b9e99f";
 const store_passwd = "teamp65d7090b9e99f@ssl";
-const is_live = false; // true for live, false for sandbox
+const is_live = true; // true for live, false for sandbox
 
 // get all orders
 const AllOrders = async (req,res)=>{

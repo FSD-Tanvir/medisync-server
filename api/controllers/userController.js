@@ -158,44 +158,6 @@ const updateUser = async (req, res) => {
   }
 };
 
-// check the of role of user - if they are admin or normal user
-// const checkRole = async (req, res) => {
-//   try {
-//     const userEmail = req.params?.email;
-//     const user = await User.findOne({ email: userEmail });
-//     let role;
-//     if (user) {
-//       role = user?.role === "user" ? "user" : "admin";
-//     }
-//     res.status(200).json({
-//       status: true,
-//       message: "Successfully got the role",
-//       role: role,
-//     });
-//   } catch (err) {
-//     res.status(500).json({
-//       status: false,
-//       message: err.message,
-//     });
-//   }
-// };
-
-// delete many
-// const deleteAllUsers = async(req, res)=>{
-//   try{
-//     await User.deleteMany({})
-//     res.status(200).json({
-//       status: true,
-//       message: "All user deleted successfully"
-//     });
-//   }
-//   catch(err){
-//     res.status(500).json({
-//       status: false,
-//       message: err.message,
-//     });
-//   }
-// }
 
 module.exports = {
   getAllUsers,
