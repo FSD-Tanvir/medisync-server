@@ -83,9 +83,9 @@ const postPayment = async (req, res) => {
             ship_country: 'Bangladesh',
         };
         const sslcz = new SSLCommerzPayment(store_id, store_passwd, is_live)
-        const sslrespone= await sslcz.init(data)
+        const sslresponse= await sslcz.init(data)
         if(sslresponse.status === "SUCCESS"){
-            let GatewayPageURL = apiResponse.GatewayPageURL
+            let GatewayPageURL = sslresponse.GatewayPageURL
             const newOrder = new SSLCommerzModel({
                 orderId:tranId,
                 products: order.products,
